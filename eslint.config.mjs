@@ -13,7 +13,6 @@ export default [
         languageOptions: { globals: globals.node },
     },
     {
-    // update this to match your test files
         files: ["**/*.spec.js", "**/*.test.js"],
         plugins: { jest: pluginJest },
         languageOptions: {
@@ -25,7 +24,7 @@ export default [
             "jest/no-identical-title": "error",
             "jest/prefer-to-have-length": "warn",
             "jest/valid-expect": "error",
-        },
+        }
     },
     pluginJs.configs.recommended,
     {
