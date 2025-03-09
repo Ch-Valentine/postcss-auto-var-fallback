@@ -1,8 +1,8 @@
 # PostCSS Var Fallback
 
-[![npm](https://img.shields.io/npm/v/css-modules-dts-loader)](https://www.npmjs.com/package/postcss-auto-var-fallback)
-[![npm](https://img.shields.io/npm/dw/css-modules-dts-loader)](https://www.npmjs.com/package/postcss-auto-var-fallback)
-[![license](https://img.shields.io/npm/l/css-modules-dts-loader)](https://github.com/Ch-Valentine/postcss-auto-var-fallback/blob/develop/LICENSE)
+[![npm](https://img.shields.io/npm/v/postcss-auto-var-fallback)](https://www.npmjs.com/package/postcss-auto-var-fallback)
+[![npm](https://img.shields.io/npm/dw/postcss-auto-var-fallback)](https://www.npmjs.com/package/postcss-auto-var-fallback)
+[![license](https://img.shields.io/npm/l/postcss-auto-var-fallback)](https://github.com/Ch-Valentine/postcss-auto-var-fallback/blob/develop/LICENSE)
 
 A [PostCSS](https://github.com/postcss/postcss) plugin that automatically adds fallback values to CSS variables based on their definitions in other CSS files.
 
