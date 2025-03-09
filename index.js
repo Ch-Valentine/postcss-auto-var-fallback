@@ -22,6 +22,7 @@ const loadCssFile = (filePath) => {
         const css = fs.readFileSync(filePath, "utf8");
         const root = postcss.parse(css, { from: filePath });
         fileCache.set(filePath, root);
+        
         return root;
     } catch (error) {
         console.warn(`Warning: Could not load CSS file ${filePath}:`, error.message);
@@ -108,6 +109,7 @@ const resolveVariable = (varName, variableMap, resolving = new Set()) => {
 
     // Cache and return the final resolved value
     variableCache.set(cacheKey, resolvedValue);
+    
     return resolvedValue;
 };
 
