@@ -21,6 +21,7 @@ const loadCssFile = (filePath) => {
     try {
         const css = fs.readFileSync(filePath, "utf8");
         const root = postcss.parse(css, { from: filePath });
+
         fileCache.set(filePath, root);
         
         return root;
