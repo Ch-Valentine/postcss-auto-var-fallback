@@ -1,0 +1,56 @@
+{
+    "name": "postcss-auto-var-fallback",
+    "version": "1.0.0-alpha.1",
+    "description": "A PostCSS plugin that automatically adds fallback values to CSS variables based on their definitions in other CSS files.",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Ch-Valentine/postcss-auto-var-fallback.git"
+    },
+    "scripts": {
+        "test": "jest",
+        "lint": "eslint .",
+        "release": "semantic-release"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "postcss",
+        "plugin",
+        "css",
+        "variables",
+        "fallback"
+    ],
+    "author": "Ch-Valentine <senioro.work@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Ch-Valentine/postcss-auto-var-fallback/issues"
+    },
+    "homepage": "https://github.com/Ch-Valentine/postcss-auto-var-fallback#readme",
+    "files": [
+        "index.js",
+        "README.md",
+        "LICENSE"
+    ],
+    "devDependencies": {
+        "@eslint/js": "^9.22.0",
+        "@semantic-release/changelog": "^6.0.3",
+        "@semantic-release/commit-analyzer": "^13.0.1",
+        "@semantic-release/git": "^10.0.1",
+        "@semantic-release/github": "^11.0.1",
+        "@semantic-release/npm": "^12.0.1",
+        "@semantic-release/release-notes-generator": "^14.0.1",
+        "eslint": "^9.22.0",
+        "eslint-plugin-jest": "^28.11.0",
+        "globals": "^15.14.0",
+        "jest": "^29.7.0",
+        "semantic-release": "^24.2.3"
+    },
+    "dependencies": {
+        "postcss": "^8.4.31"
+    },
+    "peerDependencies": {
+        "postcss": "^8.0"
+    }
+}
