@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/Ch-Valentine/postcss-auto-var-fallback/compare/v1.0.0...v1.0.1) (2025-03-10)
+
+
+### Bug Fixes
+
+* **releaseci:** added permissions ([ae1068f](https://github.com/Ch-Valentine/postcss-auto-var-fallback/commit/ae1068f35698e274787e12730db69ddc5500e228))
+
 # 1.0.0 (2025-03-10)
 
 
