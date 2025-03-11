@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require("fs").promises;
 const path = require("path");
 const postcss = require("postcss");
 
@@ -13,22 +13,18 @@ const variableCache = new Map();
  * @param {string} filePath - Path to the CSS file
  * @returns {Promise<postcss.Root>} Parsed CSS AST
  */
-const loadCssFile = (filePath) => {
+const loadCssFile = async (filePath) => {
+
     if (fileCache.has(filePath)) {
         return fileCache.get(filePath);
     }
 
-    try {
-        const css = fs.readFileSync(filePath, "utf8");
-        const root = postcss.parse(css, { from: filePath });
+    const css = await fs.readFile(filePath, "utf8");
+    const root = postcss.parse(css, { from: filePath });
 
-        fileCache.set(filePath, root);
-        
-        return root;
-    } catch (error) {
-        console.warn(`Warning: Could not load CSS file ${filePath}:`, error.message);
-        return null;
-    }
+    fileCache.set(filePath, root);
+
+    return root;
 };
 
 /**
@@ -53,13 +49,17 @@ const extractVariables = (root) => {
  * @param {string} varName - The variable name to resolve
  * @param {Map<string, string>} variableMap - Map of all available variables
  * @param {Set<string>} resolving - Set of variables being resolved (for circular reference detection)
- * @returns {string|null|object} The resolved value, null if unresolvable, or an object with isCircular flag
+ * @param {Result} result - PostCSS Result object for warnings
+ * @returns {string|null} The resolved value or null if unresolvable
  */
-const resolveVariable = (varName, variableMap, resolving = new Set()) => {
+const resolveVariable = (varName, variableMap, resolving = new Set(), result = null) => {
     // If this variable is already being resolved, we have a circular reference
     if (resolving.has(varName)) {
-        console.warn(`Warning: Circular reference detected for variable ${varName}`);
-        // Return null for circular references instead of an object
+        if (result) {
+            result.warn(`Circular reference detected for variable ${varName}`, {
+                word: varName
+            });
+        }
         return null;
     }
 
@@ -93,7 +93,8 @@ const resolveVariable = (varName, variableMap, resolving = new Set()) => {
         const nestedResolvedValue = resolveVariable(
             referencedVarName.trim(),
             variableMap,
-            new Set(resolving)
+            new Set(resolving),
+            result
         );
 
         if (nestedResolvedValue !== null) {
@@ -110,7 +111,6 @@ const resolveVariable = (varName, variableMap, resolving = new Set()) => {
 
     // Cache and return the final resolved value
     variableCache.set(cacheKey, resolvedValue);
-    
     return resolvedValue;
 };
 
@@ -123,11 +123,12 @@ module.exports = (opts = {}) => {
     return {
         postcssPlugin: "postcss-var-fallback",
 
-        Once(root) {
+        async Once(root, { result }) {
             if (!Array.isArray(fallbacks) || fallbacks.length === 0) {
-                console.warn("Warning: Fallbacks must be an array of file paths");
+                result.warn("Fallbacks must be an array of file paths");
                 return;
             }
+            
             // Clear caches for each run
             fileCache.clear();
             variableCache.clear();
@@ -144,16 +145,25 @@ module.exports = (opts = {}) => {
                         fallbackPath
                     );
 
-                    const fallbackRoot = loadCssFile(absolutePath);
+                    const fallbackRoot = await loadCssFile(absolutePath);
+
                     if (fallbackRoot) {
                         const fileVariables = extractVariables(fallbackRoot);
                         // Later files override earlier ones
                         fileVariables.forEach((value, key) => {
                             variableMap.set(key, value);
                         });
+                    } else {
+                        result.warn(`Could not load CSS file ${fallbackPath}`, {
+                            word: fallbackPath,
+                            node: root
+                        });
                     }
                 } catch (error) {
-                    console.warn(`Warning: Error processing fallback file ${fallbackPath}:`, error.message);
+                    result.warn(`Error processing fallback file ${fallbackPath}: ${error.message}`, {
+                        word: fallbackPath,
+                        node: root
+                    });
                 }
             }
 
@@ -162,6 +172,9 @@ module.exports = (opts = {}) => {
             const detectCircular = (varName, path = new Set()) => {
                 if (path.has(varName)) {
                     circularRefs.add(varName);
+                    result.warn(`Circular reference detected for variable ${varName}`, {
+                        word: varName
+                    });
                     return true;
                 }
 
@@ -212,7 +225,7 @@ module.exports = (opts = {}) => {
                     if (circularRefs.has(trimmedVarName)) {
                         newValue += fullMatch;
                     } else {
-                        const resolvedValue = resolveVariable(trimmedVarName, variableMap);
+                        const resolvedValue = resolveVariable(trimmedVarName, variableMap, new Set(), result);
 
                         if (resolvedValue) {
                             // Add the var() with fallback, with comma to match CSS spec
