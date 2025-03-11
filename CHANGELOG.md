@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/Ch-Valentine/postcss-auto-var-fallback/compare/v1.0.1...v1.1.0) (2025-03-11)
+
+
+### Features
+
+* **plugin:** added async processing and improve logging ([a73b12e](https://github.com/Ch-Valentine/postcss-auto-var-fallback/commit/a73b12e17de126093c0a00fd0fd8fb0da3a835ed))
+
 ## [1.0.1](https://github.com/Ch-Valentine/postcss-auto-var-fallback/compare/v1.0.0...v1.0.1) (2025-03-10)
 
 
