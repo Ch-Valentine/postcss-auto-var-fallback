@@ -50,7 +50,7 @@ module.exports = {
             fallbacks: [
                 './src/styles/variables.css',
                 './src/styles/theme.css',
-                "@yourcompany-designsystem/theme.css"
+                require.resolve("@yourcompany-designsystem/theme.css")
             ]
         })
     ]
