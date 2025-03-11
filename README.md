@@ -1,4 +1,4 @@
-# PostCSS Var Fallback
+# PostCSS Auto Var Fallback
 
 [![npm](https://img.shields.io/npm/v/postcss-auto-var-fallback)](https://www.npmjs.com/package/postcss-auto-var-fallback)
 [![npm](https://img.shields.io/npm/dw/postcss-auto-var-fallback)](https://www.npmjs.com/package/postcss-auto-var-fallback)
